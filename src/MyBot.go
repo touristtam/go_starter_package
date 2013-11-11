@@ -1,6 +1,7 @@
 package main
 
 import (
+    "os"
 	"math/rand"
 )
 
@@ -17,7 +18,7 @@ func NewBot(s *State) Bot {
 }
 
 //DoTurn is where you should do your bot's actual work.
-func (mb *MyBot) DoTurn(s *State) error {
+func (mb *MyBot) DoTurn(s *State) os.Error {
 	dirs := []Direction{North, East, South, West}
 	for loc, ant := range s.Map.Ants {
 		if ant != MY_ANT {
