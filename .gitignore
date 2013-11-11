@@ -2,10 +2,12 @@
 *.o
 *.a
 *.so
+*.pyc
 
 # Folders
 _obj
 _test
+game_logs
 
 # Architecture specific extensions/prefixes
 *.[568vq]

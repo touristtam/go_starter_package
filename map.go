@@ -287,7 +287,8 @@ func (m *Map) AddDestination(loc Location) {
 }
 
 func (m *Map) RemoveDestination(loc Location) {
-	m.Destinations[loc] = false, false
+	//m.Destinations[loc] = false, false
+	delete(m.Destinations, loc)
 }
 
 //SafeDestination will tell you if the given location is a 
