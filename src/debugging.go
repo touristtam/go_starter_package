@@ -7,6 +7,7 @@ import (
 	"os"
 	"image"
 	"image/png"
+	"image/color"
 )
 
 //I added a mechanism to make customizing image output a lot easier, see
@@ -28,19 +29,19 @@ import (
 
 type ImageHelper struct {
 	m     *Map
-	pixel func(row, col int) image.NRGBAColor
+	pixel func(row, col int) color.NRGBA
 }
 
-func (ih ImageHelper) ColorModel() image.ColorModel {
-	return image.NRGBAColorModel
+func (ih ImageHelper) ColorModel() color.Model {
+	return color.RGBAModel
 }
 func (ih ImageHelper) Bounds() image.Rectangle {
 	return image.Rect(0, 0, ih.m.Cols*4, ih.m.Rows*4)
 }
-func (ih ImageHelper) At(x, y int) image.Color {
+func (ih ImageHelper) At(x, y int) color.Color {
 	return ih.pixel(y/4, x/4)
 }
-func (s *State) WriteDebugImage(Desc string, At func(row, col int) image.NRGBAColor) {
+func (s *State) WriteDebugImage(Desc string, At func(row, col int) color.NRGBA) {
 
 	//use -imgprefix="bot0" to make a series of images (bot0.0.png ... bot0.N.png) which
 	//illustrate the bot's knowledge of the map at each turn. If you want the images in a
@@ -64,50 +65,50 @@ func (s *State) WriteDebugImage(Desc string, At func(row, col int) image.NRGBACo
 	}
 }
 
-func (o Item) Color() image.NRGBAColor {
+func (o Item) Color() color.NRGBA {
 	switch o {
 	case UNKNOWN:
-		return image.NRGBAColor{0xb0, 0xb0, 0xb0, 0xff}
+		return color.NRGBA{0xb0, 0xb0, 0xb0, 0xff}
 	case WATER:
-		return image.NRGBAColor{0x10, 0x10, 0x50, 0xff}
+		return color.NRGBA{0x10, 0x10, 0x50, 0xff}
 	case FOOD:
-		return image.NRGBAColor{0xe0, 0xe0, 0xc0, 0xff}
+		return color.NRGBA{0xe0, 0xe0, 0xc0, 0xff}
 	case LAND:
-		return image.NRGBAColor{0x8b, 0x45, 0x13, 0xff}
+		return color.NRGBA{0x8b, 0x45, 0x13, 0xff}
 	case DEAD:
-		return image.NRGBAColor{0x69, 0x33, 0x05, 0xff}
+		return color.NRGBA{0x69, 0x33, 0x05, 0xff}
 	case MY_ANT:
-		return image.NRGBAColor{0xf0, 0x00, 0x00, 0xff}
+		return color.NRGBA{0xf0, 0x00, 0x00, 0xff}
 	case ANT_1:
-		return image.NRGBAColor{0xf0, 0xf0, 0x00, 0xff}
+		return color.NRGBA{0xf0, 0xf0, 0x00, 0xff}
 	case ANT_2:
-		return image.NRGBAColor{0x00, 0xf0, 0x00, 0xff}
+		return color.NRGBA{0x00, 0xf0, 0x00, 0xff}
 	case ANT_3:
-		return image.NRGBAColor{0x00, 0x00, 0xf0, 0xff}
+		return color.NRGBA{0x00, 0x00, 0xf0, 0xff}
 	case ANT_4:
-		return image.NRGBAColor{0xf0, 0x00, 0xf0, 0xff}
+		return color.NRGBA{0xf0, 0x00, 0xf0, 0xff}
 	case ANT_5:
-		return image.NRGBAColor{0xf0, 0xf0, 0xf0, 0xff}
+		return color.NRGBA{0xf0, 0xf0, 0xf0, 0xff}
 	case ANT_6:
-		return image.NRGBAColor{0x80, 0x80, 0x00, 0xff}
+		return color.NRGBA{0x80, 0x80, 0x00, 0xff}
 	case ANT_7:
-		return image.NRGBAColor{0x00, 0x80, 0x80, 0xff}
+		return color.NRGBA{0x00, 0x80, 0x80, 0xff}
 	case ANT_8:
-		return image.NRGBAColor{0x80, 0x00, 0x80, 0xff}
+		return color.NRGBA{0x80, 0x00, 0x80, 0xff}
 	case ANT_9:
-		return image.NRGBAColor{0x80, 0x00, 0xf0, 0xff}
+		return color.NRGBA{0x80, 0x00, 0xf0, 0xff}
 	}
-	return image.NRGBAColor{0x00, 0x00, 0x00, 0xff}
+	return color.NRGBA{0x00, 0x00, 0x00, 0xff}
 }
 
 //implement Image for fancy image debugging
-func (m *Map) ColorModel() image.ColorModel {
-	return image.NRGBAColorModel
+func (m *Map) ColorModel() color.Model {
+	return color.NRGBAModel
 }
 func (m *Map) Bounds() image.Rectangle {
 	return image.Rect(0, 0, m.Cols*4, m.Rows*4)
 }
-func (m *Map) At(x, y int) image.Color {
+func (m *Map) At(x, y int) color.Color {
 	loc := m.FromRowCol(y/4, x/4)
 	return m.itemGrid[loc].Color()
 }

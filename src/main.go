@@ -1,8 +1,8 @@
 package main
 
 import (
-	"os"
 	"log"
+	"io"
 )
 
 //main initializes the state and starts the processing loop
@@ -16,7 +16,7 @@ func main() {
 	err = s.Loop(mb, func() {
 		//if you want to do other between-turn debugging things, you can do them here
 	})
-	if err != nil && err != os.EOF {
+	if err != nil && err != io.EOF {
 		log.Panicf("Loop() failed (%s)", err)
 	}
 }

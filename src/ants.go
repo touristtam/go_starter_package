@@ -7,11 +7,13 @@ import (
 	"strings"
 	"fmt"
 	"log"
+	"errors"
+	"io"
 )
 
 //Bot interface defines what we need from a bot
 type Bot interface {
-	DoTurn(s *State) os.Error
+	DoTurn(s *State) error
 }
 
 var stdin = bufio.NewReader(os.Stdin)
@@ -33,7 +35,7 @@ type State struct {
 }
 
 //Start takes the initial parameters from stdin
-func (s *State) Start() os.Error {
+func (s *State) Start() error {
 
 	for {
 		line, err := stdin.ReadString('\n')
@@ -53,7 +55,7 @@ func (s *State) Start() os.Error {
 		words := strings.SplitN(line, " ", 2)
 		if len(words) != 2 {
 			panic(`"` + line + `"`)
-			return os.NewError("invalid command format: " + line)
+			return errors.New("invalid command format: " + line)
 		}
 
 		param, _ := strconv.Atoi(words[1])
@@ -76,7 +78,7 @@ func (s *State) Start() os.Error {
 		case "spawnradius2":
 			s.SpawnRadius2 = param
 		case "player_seed":
-			param64, _ := strconv.Atoi64(words[1])
+			param64, _ := strconv.ParseInt(words[1], 10, 64)
 			s.PlayerSeed = param64
 		case "turn":
 			s.Turn = param
@@ -95,7 +97,7 @@ func (s *State) Start() os.Error {
 //b's DoWork function gets called each turn after the map has been setup
 //BetweenTurnWork gets called after a turn but before the map is reset. It is
 //meant to do debugging work.
-func (s *State) Loop(b Bot, BetweenTurnWork func()) os.Error {
+func (s *State) Loop(b Bot, BetweenTurnWork func()) error {
 
 	//indicate we're ready
 	os.Stdout.Write([]byte("go\n"))
@@ -103,7 +105,7 @@ func (s *State) Loop(b Bot, BetweenTurnWork func()) os.Error {
 	for {
 		line, err := stdin.ReadString('\n')
 		if err != nil {
-			if err == os.EOF {
+			if err == io.EOF {
 				return err
 			}
 			log.Panicf("ReadString returns an error: %s", err)
