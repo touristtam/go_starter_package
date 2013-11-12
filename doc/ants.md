@@ -96,6 +96,11 @@ On ```line``` value equal ```ready```, exit
 		break
 	}
 ```
+Initialize ```words``` as a ```slice``` (see [SplitN] (http://golang.org/pkg/strings/#SplitN))
+```
+	words := strings.SplitN(line, " ", 2)
+```
+
 __Code:__
 ```
 	func (s *State) Start() error {

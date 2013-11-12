@@ -243,6 +243,21 @@ type Map
 ----------------
 __Description:__ 
 
+
+__List of variables:__
+
+| var          | type                    | value              |
+| :----------- | :---------------------: | :----------------: |
+| Rows         | ```int```               |                    |
+| Cols         | ```int```               |                    |
+| itemGrid     | ```[]Item```            |                    |
+| Ants         | ```map[Location]Item``` |                    |
+| Hills        | ```map[Location]Item``` |                    |
+| Dead         | ```map[Location]Item``` |                    |
+| Water        | ```map[Location]bool``` |                    |
+| Food         | ```map[Location]bool``` |                    |
+| Destinations | ```map[Location]bool``` |                    |
+
 __Code:__
 ```
 type Map struct {
