@@ -1,18 +1,19 @@
-ants
+ants.go
 =====
 type Bot
 ----------------
+__Description:__ Bot interface defines what we need from a bot
+
 Declare the ```Bot``` interface
 
-Defines what we need from a bot
 ```
 	type Bot interface 
 ```
-Calls the [```DoTurn()```] (/doc/MyBot.md#func DoTurn) method, passing a [```State```] (/doc/ants.md#type State), optionally returns an ```error```
+Calls the [```DoTurn()```] (/doc/MyBot.md#func-doturn) method, passing a [```State```] (/doc/ants.md#type-state), optionally returns an ```error```
 ```
 	DoTurn(s *State) error
 ```
-Complete definition
+__Code:__
 ```
 	type Bot interface {
 		DoTurn(s *State) error
@@ -26,9 +27,9 @@ Initialize ```stdin``` variable as a [bufio.NewReader] (http://golang.org/pkg/bu
 ```
 type State
 ----------------
-Declare the ```State``` struct
+__Description:__ Keeps track of everything that needs to be known about the state of the game
 
-Keeps track of everything that needs to be known about the state of the game
+Declare the ```State``` struct
 
 | var           | type        | value                               |
 | :------------ | :---------: | :---------------------------------: |
@@ -43,6 +44,7 @@ Keeps track of everything that needs to be known about the state of the game
 | PlayerSeed    | ```int64``` | random player seed                  |
 | Turn          | ```int```   | current turn number                 |
 
+__Code:__
 ```
 	type State struct {
 		LoadTime      int
@@ -60,9 +62,11 @@ Keeps track of everything that needs to be known about the state of the game
 ```
 func Start
 ----------------
-Takes a [```State```] (/doc/ants.md#type State) Object, optionally returns an error
+__Description:__ Start takes the initial parameters from stdin
+
+Takes a [```State```] (/doc/ants.md#type-state) Object, optionally returns an error
 ```
-	func (s *State) Start() error 
+	func (s *State) Start() error { ... }
 ```
 Initialize ```line``` from [bufio.Reader.ReadString] (http://golang.org/pkg/bufio/#Reader.ReadString) and catch eventual ```error```
 ```
@@ -86,7 +90,7 @@ On ```line``` value equal ```ready```, exit
 		break
 	}
 ```
-Complete method:
+__Code:__
 ```
 	func (s *State) Start() error {
 		for {
@@ -136,4 +140,149 @@ Complete method:
 		s.Map = NewMap(s.Rows, s.Cols)
 		return nil
 	}
+```
+func Loop
+----------------
+__Description:__ Loop handles the majority of communication between your bot and the server. b's DoWork function gets called each turn after the map has been setup BetweenTurnWork gets called after a turn but before the map is reset. It is meant to do debugging work.
+
+__Code:__
+```
+func (s *State) Loop(b Bot, BetweenTurnWork func()) error {
+	os.Stdout.Write([]byte("go\n"))
+	for {
+		line, err := stdin.ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
+				return err
+			}
+			log.Panicf("ReadString returns an error: %s", err)
+			return err
+		}
+		line = line[:len(line)-1] //remove the delimiter
+		if line == "" {
+			continue
+		}
+		if line == "go" {
+			b.DoTurn(s)
+			s.endTurn()
+			BetweenTurnWork()
+			s.Map.Reset()
+			continue
+		}
+		if line == "end" {
+			break
+		}
+		words := strings.SplitN(line, " ", 5)
+		if len(words) < 2 {
+			log.Panicf("Invalid command format: \"%s\"", line)
+		}
+		switch words[0] {
+		case "turn":
+			turn, _ := strconv.Atoi(words[1])
+			if turn != s.Turn+1 {
+				log.Panicf("Turn number out of sync, expected %v got %v", s.Turn+1, turn)
+			}
+			s.Turn = turn
+		case "f":
+			if len(words) < 3 {
+				log.Panicf("Invalid command format (not enough parameters for food): \"%s\"", line)
+			}
+			Row, _ := strconv.Atoi(words[1])
+			Col, _ := strconv.Atoi(words[2])
+			loc := s.Map.FromRowCol(Row, Col)
+			s.Map.AddFood(loc)
+		case "w":
+			if len(words) < 3 {
+				log.Panicf("Invalid command format (not enough parameters for water): \"%s\"", line)
+			}
+			Row, _ := strconv.Atoi(words[1])
+			Col, _ := strconv.Atoi(words[2])
+			loc := s.Map.FromRowCol(Row, Col)
+			s.Map.AddWater(loc)
+		case "a":
+			if len(words) < 4 {
+				log.Panicf("Invalid command format (not enough parameters for ant): \"%s\"", line)
+			}
+			Row, _ := strconv.Atoi(words[1])
+			Col, _ := strconv.Atoi(words[2])
+			Ant, _ := strconv.Atoi(words[3])
+			loc := s.Map.FromRowCol(Row, Col)
+			s.Map.AddAnt(loc, Item(Ant))
+			if Item(Ant) == MY_ANT {
+				s.Map.AddDestination(loc)
+				s.Map.AddLand(loc, s.ViewRadius2)
+			}
+		case "A":
+			if len(words) < 4 {
+				log.Panicf("Invalid command format (not enough parameters for ant): \"%s\"", line)
+			}
+			Row, _ := strconv.Atoi(words[1])
+			Col, _ := strconv.Atoi(words[2])
+			Ant, _ := strconv.Atoi(words[3])
+			loc := s.Map.FromRowCol(Row, Col)
+			s.Map.AddAnt(loc, Item(Ant).ToOccupied())
+			if Item(Ant) == MY_ANT {
+				s.Map.AddDestination(loc)
+				s.Map.AddLand(loc, s.ViewRadius2)
+			}
+		case "h":
+			if len(words) < 4 {
+				log.Panicf("Invalid command format (not enough parameters for ant): \"%s\"", line)
+			}
+			Row, _ := strconv.Atoi(words[1])
+			Col, _ := strconv.Atoi(words[2])
+			Ant, _ := strconv.Atoi(words[3])
+			loc := s.Map.FromRowCol(Row, Col)
+			s.Map.AddHill(loc, Item(Ant).ToUnoccupied())
+		case "d":
+			if len(words) < 4 {
+				log.Panicf("Invalid command format (not enough parameters for dead ant): \"%s\"", line)
+			}
+			Row, _ := strconv.Atoi(words[1])
+			Col, _ := strconv.Atoi(words[2])
+			Ant, _ := strconv.Atoi(words[3])
+			loc := s.Map.FromRowCol(Row, Col)
+			s.Map.AddDeadAnt(loc, Item(Ant))
+		}
+	}
+	return nil
+}
+```
+func IssueOrderRowCol
+----------------
+__Description:__ Call IssueOrderRowCol to issue an order for an ant at (Row, Col)
+
+__Code:__
+```
+func (s *State) IssueOrderRowCol(Row, Col int, d Direction) {
+	loc := s.Map.FromRowCol(Row, Col)
+	dest := s.Map.Move(loc, d)
+	s.Map.RemoveDestination(loc)
+	s.Map.AddDestination(dest)
+	fmt.Fprintf(os.Stdout, "o %d %d %s\n", Row, Col, d)
+}
+```
+func IssueOrderLoc
+----------------
+__Description:__ Call IssueOrderLoc to issue an order for an ant at loc
+
+__Code:__
+```
+func (s *State) IssueOrderLoc(loc Location, d Direction) {
+	Row, Col := s.Map.FromLocation(loc)
+	dest := s.Map.Move(loc, d)
+	s.Map.RemoveDestination(loc)
+	s.Map.AddDestination(dest)
+	fmt.Fprintf(os.Stdout, "o %d %d %s\n", Row, Col, d)
+}
+```
+func endTurn
+----------------
+__Description:__ endTurn is called by Loop, you don't need to call it.
+
+__Code:__
+```
+func (s *State) endTurn() {
+	os.Stdout.Write([]byte("go\n"))
+}
 ```

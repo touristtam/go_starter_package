@@ -1,27 +1,34 @@
-MyBot
+MyBot.go
 =====
 
 type MyBot
 ---------------
 Declare the ```MyBot``` struct
+
+__Code:__
 ```
 	type MyBot struct {}
 ```
 func NewBots
 ----------------
-Takes a [```State```] (/doc/ants.md#type State) Object and return a [```Bot```] (/doc/ants.md#type Bot)
+__Description:__ NewBot creates a new instance of your bot
+
+Takes a [```State```] (/doc/ants.md#type-state) Object and return a [```Bot```] (/doc/ants.md#type-bot) 
 ```
 	func NewBot(s *State) Bot
 ```
-Initialize a struct [```MyBot```] (/doc/MyBot.md#type MyBot):
+Initialize a struct [```MyBot```] (/doc/MyBot.md#type-mybot)
+
+___do any necessary initialization here___
 ```
-	mb := &MyBot{}
+	mb := &MyBot{ ... }
 ```
 Return the instance:
 ```
 	return mb
 ```
-Complete method:
+
+__Code:__
 ```
 	func NewBot(s *State) Bot {
 		mb := &MyBot{
@@ -32,9 +39,11 @@ Complete method:
 ```
 func DoTurn
 ---------------
-Takes a [```State```] (/doc/ants.md#type State) and apply it to a ```MyBot``` instance, optionally returns an error
+__Description:__ DoTurn is where you should do your bot's actual work.
+
+Takes a [```State```] (/doc/ants.md#type-state) and apply it to a [```MyBot```] (/doc/MyBot.md#type-mybot) instance, optionally returns an ```error```
 ```
-	func (mb *MyBot) DoTurn(s *State) error
+	func (mb *MyBot) DoTurn(s *State) error { ... }
 ```
 Initialize an array of ```Direction```
 ```
@@ -42,7 +51,7 @@ Initialize an array of ```Direction```
 ```
 Loop through the ```s.Maps.Ants``` as Key (```loc```), Value (```ant```)
 ```
-	for loc, ant := range s.Map.Ants
+	for loc, ant := range s.Map.Ants { ... }
 ```
 Check that ```ants``` is NOT of value ```MY_ANT``` in order to discard the ```loc```
 ```
@@ -50,27 +59,29 @@ Check that ```ants``` is NOT of value ```MY_ANT``` in order to discard the ```lo
 		continue
 	}
 ```
+___try each direction in a random order___
+
 Initialize ```p``` as a set of ```int``` (see [rand.Perm] (http://golang.org/pkg/math/rand/#Perm))
 ```
 	p := rand.Perm(4)
 ```
 Loop through the values of ```p```
 ```
-	for _, i := range p
+	for _, i := range p { ... }
 ```
 Initialize ```d``` as a Direction
 ```
 	d := dirs[i]
 ```
-Initialize ```loc2``` as a new Location (could have been called __destination__ in this context)
+Initialize ```loc2``` as a new [```Location```] (/doc/map.md#type-location) by calling [```Move()```] (/doc/map.md#func-move)
 ```
 	loc2 := s.Map.Move(loc, d)
 ```
-Check if destination is deemed safe
+Check if destination is deemed safe by calling [```SafeDestination()```] (/doc/map.md#func-safedestination)
 ```
-	if s.Map.SafeDestination(loc2) 
+	if s.Map.SafeDestination(loc2) { ... }
 ```
-Do the actual ```Move``` and end the loop
+Do the actual [```Move()```] (/doc/map.md#func-move) by calling [```IssueOrderLoc()```] (/doc/ants.md#func-issueorderloc), and end the loop
 ```
 	s.IssueOrderLoc(loc, d)
 	break
