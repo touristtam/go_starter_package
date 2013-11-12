@@ -5,7 +5,6 @@ import (
 )
 
 type MyBot struct {
-
 }
 
 //NewBot creates a new instance of your bot
@@ -19,6 +18,7 @@ func NewBot(s *State) Bot {
 //DoTurn is where you should do your bot's actual work.
 func (mb *MyBot) DoTurn(s *State) error {
 	dirs := []Direction{North, East, South, West}
+	//ants := []int{}
 	for loc, ant := range s.Map.Ants {
 		if ant != MY_ANT {
 			continue
@@ -28,7 +28,6 @@ func (mb *MyBot) DoTurn(s *State) error {
 		p := rand.Perm(4)
 		for _, i := range p {
 			d := dirs[i]
-
 			loc2 := s.Map.Move(loc, d)
 			if s.Map.SafeDestination(loc2) {
 				s.IssueOrderLoc(loc, d)

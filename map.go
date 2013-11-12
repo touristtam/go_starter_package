@@ -77,7 +77,6 @@ func (o Item) IsHill() bool {
 	return false
 }
 
-
 //Player returns the player number of the given ant/hill (0 - 9)
 func (o Item) Player() int {
 	if o < 0 || o > OCCUPIED_HILL_9 {
@@ -153,7 +152,6 @@ func FromSymbol(ch byte) Item {
 	return Item(ch) + 'a'
 }
 
-
 //Location combines (Row, Col) coordinate pairs for use as keys in maps (and in a 1d array)
 type Location int
 
@@ -161,8 +159,7 @@ type Map struct {
 	Rows int
 	Cols int
 
-	itemGrid []Item
-
+	itemGrid     []Item
 	Ants         map[Location]Item
 	Hills        map[Location]Item
 	Dead         map[Location]Item
@@ -291,7 +288,7 @@ func (m *Map) RemoveDestination(loc Location) {
 	delete(m.Destinations, loc)
 }
 
-//SafeDestination will tell you if the given location is a 
+//SafeDestination will tell you if the given location is a
 //safe place to dispatch an ant. It considers water and both
 //ants that have already sent an order and those that have not.
 func (m *Map) SafeDestination(loc Location) bool {
@@ -328,7 +325,6 @@ func (m *Map) FromLocation(loc Location) (Row, Col int) {
 	Col = int(loc) % m.Cols
 	return
 }
-
 
 //Direction represents the direction concept for issuing orders.
 type Direction int
