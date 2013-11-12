@@ -546,7 +546,7 @@ func (m *Map) FromLocation(loc Location) (Row, Col int) {
 	return
 }
 ```
-const Direction
+type Direction
 ----------------
 * __Description:__ Direction represents the direction concept for issuing orders.
 
