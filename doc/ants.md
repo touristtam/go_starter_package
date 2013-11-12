@@ -68,7 +68,7 @@ func Start
 ----------------
 * __Description:__ Start takes the initial parameters from stdin
 * __Arguments:__  none
-* __Receiver:__ [```State```] (/doc/ants.md#type-state)
+* __Receiver:__ s ([```State```] (/doc/ants.md#type-state))
 * __Returns:__ ```error```
 
 ```
@@ -117,22 +117,22 @@ Switch statement on ```words[0]```
 ```
 	switch words[0] { ... }
 ```
-If value is ```loadtime``` set [```State.LoadTime```] (/doc/ants.md#type-state) equal ```param```
+If value is ```loadtime``` set [```LoadTime```] (/doc/ants.md#type-state) equal ```param```
 ```
 	case "loadtime":
 		s.LoadTime = param
 ```
-If value is ```turntime``` set [```State.TurnTime```] (/doc/ants.md#type-state) equal ```param```
+If value is ```turntime``` set [```TurnTime```] (/doc/ants.md#type-state) equal ```param```
 ```
 	case "turntime":
 		s.TurnTime = param
 ```
-If value is ```rows``` set [```State.Rows```] (/doc/ants.md#type-state) equal ```param```
+If value is ```rows``` set [```Rows```] (/doc/ants.md#type-state) equal ```param```
 ```
 	case "rows":
 		s.Rows = param
 ```
-If value is ```cols``` set [```State.Cols```] (/doc/ants.md#type-state) equal ```param```
+If value is ```cols``` set [```Cols```] (/doc/ants.md#type-state) equal ```param```
 ```
 	case "cols":
 		s.Cols = param
@@ -142,22 +142,22 @@ If value is ```turns``` set [```State.Turns```] (/doc/ants.md#type-state) equal 
 	case "turns":
 		s.Turns = param
 ```
-If value is ```viewradius2``` set [```State.ViewRadius2```] (/doc/ants.md#type-state) equal ```param```
+If value is ```viewradius2``` set [```ViewRadius2```] (/doc/ants.md#type-state) equal ```param```
 ```
 	case "viewradius2":
 		s.ViewRadius2 = param
 ```
-If value is ```attackradius2``` set [```State.AttackRadius2```] (/doc/ants.md#type-state) equal ```param```
+If value is ```attackradius2``` set [```AttackRadius2```] (/doc/ants.md#type-state) equal ```param```
 ```
 	case "attackradius2":
 		s.AttackRadius2 = param
 ```
-If value is ```spawnradius2``` set [```State.SpawnRadius2```] (/doc/ants.md#type-state) equal ```param```
+If value is ```spawnradius2``` set [```SpawnRadius2```] (/doc/ants.md#type-state) equal ```param```
 ```
 	case "spawnradius2":
 		s.SpawnRadius2 = param
 ```
-If value is ```player_seed``` set [```State.PlayerSeed```] (/doc/ants.md#type-state) equal ```param64```
+If value is ```player_seed``` set [```PlayerSeed```] (/doc/ants.md#type-state) equal ```param64```
 ```
 	case "player_seed":
 		param64, _ := strconv.ParseInt(words[1], 10, 64)
@@ -275,7 +275,7 @@ Check ```line``` value equals "go"
 ```
 	if line == "go" { ... }
 ```
-Calls [```DoTurn()```] (/doc/MyBot.md#func-mybot)
+Calls [```DoTurn()```] (/doc/MyBot.md#func-doturn)
 ```
 	b.DoTurn(s)
 ```
@@ -286,6 +286,94 @@ Calls [```endTurn()```] (/doc/ants.md#func-enturn): ___end turn___
 CallBack function
 ```
 	BetweenTurnWork()
+```
+Reset the ```Map```'s value by calling [```Reset()```] (/doc/map.md#func-reset)
+```
+	s.Map.Reset()
+```
+Check```line``` value equals "end" to exit the loop
+```
+	if line == "end" {
+		break
+	}
+```
+Initialize ```words``` as slice (see [SplitN] (http://golang.org/pkg/strings/#SplitN))
+```
+	words := strings.SplitN(line, " ", 5)
+```
+Check for ```words``` length to be greater than 1 (see [Panicf] (http://golang.org/pkg/log/#Panicf))
+```
+	if len(words) < 2 {
+		log.Panicf("Invalid command format: \"%s\"", line)
+	}
+```
+Switch statement on ```words[0]```
+```
+	switch words[0] { ... }	
+```
+If ```words[0]``` value is ```turn```
+```
+	case "turn":
+```
+Initialize ```turn``` as ```words[1]``` using [string conversion] (http://golang.org/pkg/strconv/#Itoa)
+```
+	turn, _ := strconv.Atoi(words[1])
+```
+Check that turn are sequencials
+```
+	if turn != s.Turn+1 { ... }
+```
+Otherwise log the error (see [Panicf] (http://golang.org/pkg/log/#Panicf))
+```
+	log.Panicf("Turn number out of sync, expected %v got %v", s.Turn+1, turn)
+```
+Set [```Turn```] (/doc/ants.md#type-state) equals ```turn```
+```
+	s.Turn = turn
+```
+If ```words[0]``` value is ```f```
+```
+	case "f":
+```
+Check for ```words``` length to be greater than 2 (see [Panicf] (http://golang.org/pkg/log/#Panicf))
+```
+	if len(words) < 3 { ... }
+```
+Otherwise log the error (see [Panicf] (http://golang.org/pkg/log/#Panicf))
+```
+	log.Panicf("Invalid command format (not enough parameters for food): \"%s\"", line)
+```
+Initialize ```Row``` as ```words[1]``` using [string conversion] (http://golang.org/pkg/strconv/#Itoa)
+```
+	Row, _ := strconv.Atoi(words[1])
+```
+Initialize ```Col``` as ```words[1]``` using [string conversion] (http://golang.org/pkg/strconv/#Itoa)
+```
+	Col, _ := strconv.Atoi(words[2])
+```
+Initialize ```loc``` as returned value from [```FromRowCol()```] (/doc/map.md#func-fromrowcol)
+```
+	loc := s.Map.FromRowCol(Row, Col)
+```
+If ```words[0]``` value is ```w```
+```
+	case "w":
+```
+If ```words[0]``` value is ```a```
+```
+	case "a":
+```
+If ```words[0]``` value is ```A```
+```
+	case "A":
+```
+If ```words[0]``` value is ```h```
+```
+	case "h":
+```
+If ```words[0]``` value is ```d```
+```
+	case "d":
 ```
 
 
