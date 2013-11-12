@@ -1,14 +1,19 @@
 MyBot
 =====
 
-
+type MyBot
+---------------
+Declare the ```MyBot``` struct
+```
+	type MyBot struct {}
+```
 func NewBots
 ----------------
-Takes a ```State``` Object and return a ```Bot```:
+Takes a [```State```] (/doc/ants.md#type State) Object and return a [```Bot```] (/doc/ants.md#type Bot)
 ```
 	func NewBot(s *State) Bot
 ```
-Initialize a struct ```MyBot```:
+Initialize a struct [```MyBot```] (/doc/MyBot.md#type MyBot):
 ```
 	mb := &MyBot{}
 ```
@@ -27,7 +32,7 @@ Complete method:
 ```
 func DoTurn
 ---------------
-Takes a ```State``` Object and apply it to a ```MyBot``` instance, optionally returns an error
+Takes a [```State```] (/doc/ants.md#type State) and apply it to a ```MyBot``` instance, optionally returns an error
 ```
 	func (mb *MyBot) DoTurn(s *State) error
 ```

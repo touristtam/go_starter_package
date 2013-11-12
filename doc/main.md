@@ -7,7 +7,7 @@ Initialize a ```State```
 ```
 	var s State
 ```
-Call method ```s.Start()``` and Initialize an ```error``` var
+Call method [```s.Start()```] (/doc/ants.md#func Start) and Initialize an ```error``` var
 ```
 	err := s.Start()
 ```
