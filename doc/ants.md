@@ -5,11 +5,10 @@ type Bot
 __Description:__ Bot interface defines what we need from a bot
 
 Declare the ```Bot``` interface
-
 ```
-	type Bot interface 
+	type Bot interface { ... }
 ```
-Calls the [```DoTurn()```] (/doc/MyBot.md#func-doturn) method, passing a [```State```] (/doc/ants.md#type-state), optionally returns an ```error```
+Calls the [```DoTurn()```] (/doc/MyBot.md#func-doturn) method, passing a [```State```] (/doc/ants.md#type-state) instance, optionally returns an ```error```
 ```
 	DoTurn(s *State) error
 ```
@@ -30,6 +29,10 @@ type State
 __Description:__ Keeps track of everything that needs to be known about the state of the game
 
 Declare the ```State``` struct
+```
+	type State struct { ... }
+```
+__List of variables:__
 
 | var           | type        | value                               |
 | :------------ | :---------: | :---------------------------------: |
@@ -43,6 +46,7 @@ Declare the ```State``` struct
 | SpawnRadius2  | ```int```   | spawn radius squared                |
 | PlayerSeed    | ```int64``` | random player seed                  |
 | Turn          | ```int```   | current turn number                 |
+| Map           | ```Map```   | [type Map] (/doc/map.md#type-map)   |
 
 __Code:__
 ```
@@ -62,9 +66,11 @@ __Code:__
 ```
 func Start
 ----------------
-__Description:__ Start takes the initial parameters from stdin
+* __Description:__ Start takes the initial parameters from stdin
+* __Arguments:__  none
+* __Receiver:__ [```State```] (/doc/ants.md#type-state)
+* __Returns:__ ```error```
 
-Takes a [```State```] (/doc/ants.md#type-state) Object, optionally returns an error
 ```
 	func (s *State) Start() error { ... }
 ```
@@ -143,7 +149,10 @@ __Code:__
 ```
 func Loop
 ----------------
-__Description:__ Loop handles the majority of communication between your bot and the server. b's DoWork function gets called each turn after the map has been setup BetweenTurnWork gets called after a turn but before the map is reset. It is meant to do debugging work.
+* __Description:__ Loop handles the majority of communication between your bot and the server. b's DoWork function gets called each turn after the map has been setup BetweenTurnWork gets called after a turn but before the map is reset. It is meant to do debugging work.
+* __Receiver:__ [```State```] (/doc/ants.md#type-state)
+* __Arguments:__  [```Bot```] (/doc/ants.md#type-bot), ```BetweenTurnWork```
+* __Returns:__ ```error```
 
 __Code:__
 ```
@@ -248,9 +257,12 @@ func (s *State) Loop(b Bot, BetweenTurnWork func()) error {
 	return nil
 }
 ```
-func IssueOrderRowCol
+meth IssueOrderRowCol
 ----------------
-__Description:__ Call IssueOrderRowCol to issue an order for an ant at (Row, Col)
+* __Description:__ Call IssueOrderRowCol to issue an order for an ant at (Row, Col)
+* __Receiver:__ s ([```State```] (/doc/ants.md#type-state))
+* __Arguments:__ Row (```int```), Col (```int```), d ([```Direction```] (/doc/map.md#type-direction))
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -264,7 +276,10 @@ func (s *State) IssueOrderRowCol(Row, Col int, d Direction) {
 ```
 func IssueOrderLoc
 ----------------
-__Description:__ Call IssueOrderLoc to issue an order for an ant at loc
+* __Description:__ Call IssueOrderLoc to issue an order for an ant at loc
+* __Receiver:__ s ([```State```] (/doc/ants.md#type-state))
+* __Arguments:__ loc ([```Location```] (/doc/map.md#type-location)), d ([```Direction```] (/doc/map.md#type-direction))
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -278,7 +293,10 @@ func (s *State) IssueOrderLoc(loc Location, d Direction) {
 ```
 func endTurn
 ----------------
-__Description:__ endTurn is called by Loop, you don't need to call it.
+* __Description:__ endTurn is called by Loop, you don't need to call it.
+* __Receiver:__ s ([```State```] (/doc/ants.md#type-state))
+* __Arguments:__ _none_
+* __Returns:__ _none_
 
 __Code:__
 ```

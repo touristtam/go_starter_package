@@ -3,7 +3,10 @@ main.go
 
 func main
 ----------------
-__Description:__ Initializes the state and starts the processing loop
+* __Description:__ Initializes the state and starts the processing loop
+* __Arguments:__ _none_
+* __Receiver:__ _none_
+* __Returns:__ _none_
 
 Initialize a [```State```] (/doc/ants.md#type-state)
 ```

@@ -56,7 +56,10 @@ const (
 ```
 func IsOccupied
 ----------------
-__Description:__ IsOccupied returns true if hillOrAnt is an occupied ant hill.
+* __Description:__ IsOccupied returns true if hillOrAnt is an occupied ant hill.
+* __Receiver:__ hillOrAnt ([```Item```] (/doc/map.md#type-item))
+* __Arguments:__ _none_
+* __Returns:__ ```bool```
 
 __Code:__
 ```
@@ -69,7 +72,10 @@ func (hillOrAnt Item) IsOccupied() bool {
 ```
 func IsAnt
 ----------------
-__Description:__ IsAnt returns true if o is an ant or occupied hill
+* __Description:__ IsAnt returns true if o is an ant or occupied hill
+* __Receiver:__ o ([```Item```] (/doc/map.md#type-item))
+* __Arguments:__ _none_
+* __Returns:__ ```bool```
 
 __Code:__
 ```
@@ -85,7 +91,10 @@ func (o Item) IsAnt() bool {
 ```
 func IsHill
 ----------------
-__Description:__ IsHill returns true if o is an un/occupied hill
+* __Description:__ IsHill returns true if o is an un/occupied hill
+* __Receiver:__ o ([```Item```] (/doc/map.md#type-item))
+* __Arguments:__ _none_
+* __Returns:__ ```bool```
 
 __Code:__
 ```
@@ -101,7 +110,10 @@ func (o Item) IsHill() bool {
 ```
 func Player
 ----------------
-__Description:__ Player returns the player number of the given ant/hill (0 - 9)
+* __Description:__ Player returns the player number of the given ant/hill (0 - 9)
+* __Receiver:__ o ([```Item```] (/doc/map.md#type-item))
+* __Arguments:__ _none_
+* __Returns:__ ```int```
 
 __Code:__
 ```
@@ -114,7 +126,10 @@ func (o Item) Player() int {
 ```
 func ToUnoccupied
 ----------------
-__Description:__ ToUnoccupied returns the HILL_X version of the given hill or ant.
+* __Description:__ ToUnoccupied returns the HILL_X version of the given hill or ant.
+* __Receiver:__ hillOrAnt ([```Item```] (/doc/map.md#type-item))
+* __Arguments:__ _none_
+* __Returns:__ [```Item```] (/doc/map.md#type-item)
 
 __Code:__
 ```
@@ -124,7 +139,10 @@ func (hillOrAnt Item) ToUnoccupied() Item {
 ```
 func ToOccupied
 ----------------
-__Description:__ ToOccupied returns the OCCUPIED_HILL_X version of the given hill or ant.
+* __Description:__ ToOccupied returns the OCCUPIED_HILL_X version of the given hill or ant.
+* __Receiver:__ hillOrAnt ([```Item```] (/doc/map.md#type-item))
+* __Arguments:__ _none_
+* __Returns:__ [```Item```] (/doc/map.md#type-item)
 
 __Code:__
 ```
@@ -134,18 +152,23 @@ func (hillOrAnt Item) ToOccupied() Item {
 ```
 func ToAnt
 ----------------
-__Description:__ ToAnt returns the ANT_X version of the given hill or ant.
+* __Description:__ ToAnt returns the ANT_X version of the given hill or ant.
+* __Receiver:__ hillOrAnt ([```Item```] (/doc/map.md#type-item))
+* __Arguments:__ _none_
+* __Returns:__ [```Item```] (/doc/map.md#type-item)
 
 __Code:__
 ```
-//ToAnt returns the ANT_X version of the given hill or ant.
 func (hillOrAnt Item) ToAnt() Item {
 	return Item(hillOrAnt.Player())
 }
 ```
 func Symbol
 ----------------
-__Description:__ Symbol returns the symbol for the ascii diagram
+* __Description:__ Symbol returns the symbol for the ascii diagram
+* __Receiver:__ o ([```Item```] (/doc/map.md#type-item))
+* __Arguments:__ _none_
+* __Returns:__ ```byte```
 
 __Code:__
 ```
@@ -176,7 +199,10 @@ func (o Item) Symbol() byte {
 ```
 func FromSymbol
 ----------------
-__Description:__ FromSymbol reverses Symbol
+* __Description:__ FromSymbol reverses Symbol
+* __Receiver:__ ch (```byte```)
+* __Arguments:__ _none_
+* __Returns:__ [```Item```] (/doc/map.md#type-item)
 
 __Code:__
 ```
@@ -234,7 +260,9 @@ type Map struct {
 ```
 func NewMap
 ----------------
-__Description:__ NewMap returns a newly constructed blank map.
+* __Description:__ NewMap returns a newly constructed blank map.
+* __Arguments:__ Row (```int```), Cols (```int```)
+* __Returns:__ [```Map```]  (/doc/map.md#type-map)
 
 __Code:__
 ```
@@ -251,7 +279,10 @@ func NewMap(Rows, Cols int) *Map {
 ```
 func String
 ----------------
-__Description:__ String returns an ascii diagram of the map.
+* __Description:__ String returns an ascii diagram of the map.
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ _none_
+* __Returns:__ ```string```
 
 __Code:__
 ```
@@ -269,7 +300,10 @@ func (m *Map) String() string {
 ```
 func Reset
 ----------------
-__Description:__ Reset clears the map (except for water) for the next turn
+* __Description:__ Reset clears the map (except for water) for the next turn
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ _none_
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -291,7 +325,11 @@ func (m *Map) Reset() {
 ```
 func Item
 ----------------
-__Description:__ Item returns the item at a given location
+* __Description:__ Item returns the item at a given location
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ loc ([```Location```] (/doc/map.md#type-location))
+* __Returns:__ [```Item```] (/doc/map.md#type-item)
+
 
 __Code:__
 ```
@@ -301,7 +339,10 @@ func (m *Map) Item(loc Location) Item {
 ```
 func AddWater
 ----------------
-__Description:__ AddWater adds water to the map.
+* __Description:__ AddWater adds water to the map.
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ loc ([```Location```] (/doc/map.md#type-location))
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -313,6 +354,9 @@ func (m *Map) AddWater(loc Location) {
 func AddAnt
 ----------------
 __Description:__ AddAnt adds an ant to the map. It can also accept an occupied ant hill.
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ loc ([```Location```] (/doc/map.md#type-location)), and ([```Item```] (/doc/map.md#type-item))
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -330,6 +374,10 @@ func (m *Map) AddAnt(loc Location, ant Item) {
 func AddHill
 ----------------
 __Description:__ AddHill takes an unoccupied ant hill and adds it to the map.
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ center ([```Location```] (/doc/map.md#type-location)), hill ([```Item```] (/doc/map.md#type-item))
+* __Returns:__ _none_
+
 
 __Code:__
 ```
@@ -344,6 +392,9 @@ func (m *Map) AddHill(loc Location, hill Item) {
 func AddLand
 ----------------
 __Description:__ AddLand adds a circle of land centered on the given location
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ center ([```Location```] (/doc/map.md#type-location)), viewrad2 (```int```)
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -358,7 +409,10 @@ func (m *Map) AddLand(center Location, viewrad2 int) {
 ```
 func DoInRad
 ----------------
-__Description:__ DoInRad performs the given action for every square within the given circle.
+* __Description:__ DoInRad performs the given action for every square within the given circle.
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ center ([```Location```] (/doc/map.md#type-location)), rad2 (```int```), Action (```func```)
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -377,7 +431,10 @@ func (m *Map) DoInRad(center Location, rad2 int, Action func(row, col int)) {
 ```
 func AddDeadAnt
 ----------------
-__Description:__ 
+* __Description:__ 
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ loc ([```Location```] (/doc/map.md#type-location)), ant ([```Item```] (/doc/map.md#type-item))
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -388,7 +445,10 @@ func (m *Map) AddDeadAnt(loc Location, ant Item) {
 ```
 func AddFood
 ----------------
-__Description:__ 
+* __Description:__ 
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ loc ([```Location```] (/doc/map.md#type-location))
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -399,7 +459,10 @@ func (m *Map) AddFood(loc Location) {
 ```
 func AddDestination
 ----------------
-__Description:__ 
+* __Description:__ 
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ loc ([```Location```] (/doc/map.md#type-location))
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -412,7 +475,10 @@ func (m *Map) AddDestination(loc Location) {
 ```
 func RemoveDestination
 ----------------
-__Description:__ 
+* __Description:__ 
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ loc ([```Location```] (/doc/map.md#type-location))
+* __Returns:__ _none_
 
 __Code:__
 ```
@@ -422,7 +488,10 @@ func (m *Map) RemoveDestination(loc Location) {
 ```
 func SafeDestination
 ----------------
-__Description:__ SafeDestination will tell you if the given location is a safe place to dispatch an ant. It considers water and both ants that have already sent an order and those that have not.
+* __Description:__ SafeDestination will tell you if the given location is a safe place to dispatch an ant. It considers water and both ants that have already sent an order and those that have not.
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ loc ([```Location```] (/doc/map.md#type-location))
+* __Returns:__ ```bool```
 
 __Code:__
 ```
@@ -438,7 +507,10 @@ func (m *Map) SafeDestination(loc Location) bool {
 ```
 func FromRowCol
 ----------------
-__Description:__ FromRowCol returns a Location given an (Row, Col) pair
+* __Description:__ FromRowCol returns a Location given an (Row, Col) pair
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ Row (```int```), Col (```int```)
+* __Returns:__ [```Location```] (/doc/map.md#type-location)
 
 __Code:__
 ```
@@ -461,7 +533,10 @@ func (m *Map) FromRowCol(Row, Col int) Location {
 ```
 func FromLocation
 ----------------
-__Description:__ FromLocation returns an (Row, Col) pair given a Location
+* __Description:__ FromLocation returns an (Row, Col) pair given a Location
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ loc ([```Location```] (/doc/map.md#type-location))
+* __Returns:__ Row (```int```), Col (```int```)
 
 __Code:__
 ```
@@ -473,7 +548,7 @@ func (m *Map) FromLocation(loc Location) (Row, Col int) {
 ```
 const Direction
 ----------------
-__Description:__ Direction represents the direction concept for issuing orders.
+* __Description:__ Direction represents the direction concept for issuing orders.
 
 __Code:__
 ```
@@ -495,6 +570,10 @@ const (
 ```
 func String
 ----------------
+* __Description:__ 
+* __Receiver:__ d ([```Direction```] (/doc/map.md#cont-direction))
+* __Arguments:__ _none_
+* __Returns:__ ```string```
 
 __Code:__
 ```
@@ -517,7 +596,10 @@ func (d Direction) String() string {
 ```
 func Move
 ----------------
-__Description:__ Move returns a new location which is one step in the specified direction from the specified location.
+* __Description:__ Move returns a new location which is one step in the specified direction from the specified location.
+* __Receiver:__ m ([```Map```]  (/doc/map.md#type-map))
+* __Arguments:__ loc( [```Location```] (/doc/map.md#type-location)), d ([```Direction```] (/doc/map.md#cont-direction))
+* __Returns:__ [```Location```] (/doc/map.md#type-location)
 
 __Code:__
 ```

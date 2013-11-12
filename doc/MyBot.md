@@ -11,7 +11,10 @@ __Code:__
 ```
 func NewBots
 ----------------
-__Description:__ NewBot creates a new instance of your bot
+* __Description:__ NewBot creates a new instance of your bot
+* __Arguments:__ [```State```] (/doc/ants.md#type-state)
+* __Receiver:__ _none_
+* __Returns:__ [```Bot```] (/doc/ants.md#type-bot)
 
 Takes a [```State```] (/doc/ants.md#type-state) Object and return a [```Bot```] (/doc/ants.md#type-bot) 
 ```
@@ -39,13 +42,16 @@ __Code:__
 ```
 func DoTurn
 ---------------
-__Description:__ DoTurn is where you should do your bot's actual work.
+* __Description:__ DoTurn is where you should do your bot's actual work.
+* __Arguments:__  [```MyBot```] (/doc/MyBot.md#type-mybot)
+* __Receiver:__ [```State```] (/doc/ants.md#type-state)
+* __Returns:__ ```error```
 
-Takes a [```State```] (/doc/ants.md#type-state) and apply it to a [```MyBot```] (/doc/MyBot.md#type-mybot) instance, optionally returns an ```error```
+Takes a [```State```] (/doc/ants.md#type-state) and pass a [```MyBot```] (/doc/MyBot.md#type-mybot) instance, optionally returns an ```error```
 ```
 	func (mb *MyBot) DoTurn(s *State) error { ... }
 ```
-Initialize an array of ```Direction```
+Initialize an array of [```Direction```] (/doc/map.md#const-direction)
 ```
 	dirs := []Direction{North, East, South, West}
 ```
@@ -69,7 +75,7 @@ Loop through the values of ```p```
 ```
 	for _, i := range p { ... }
 ```
-Initialize ```d``` as a Direction
+Initialize ```d``` as a [```Direction```] ()
 ```
 	d := dirs[i]
 ```
@@ -87,11 +93,13 @@ Do the actual [```Move()```] (/doc/map.md#func-move) by calling [```IssueOrderLo
 	break
 ```
 exit the method
+
+___returning an error will halt the whole program!___
 ```
 	return nil
 ```
 
-Complete method:
+__Code:__
 ```
 	func (mb *MyBot) DoTurn(s *State) error {
 		dirs := []Direction{North, East, South, West}
