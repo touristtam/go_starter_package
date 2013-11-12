@@ -35,7 +35,7 @@ Declare the ```State``` struct
 __List of variables:__
 
 | var           | type        | value                               |
-| :------------ | :---------: | :---------------------------------: |
+| ------------: | :---------: | :---------------------------------- |
 | LoadTime      | ```int```   | in milliseconds                     |
 | TurnTime      | ```int```   | in milliseconds                     |
 | Rows          | ```int```   | number of rows in the map           |
@@ -46,7 +46,7 @@ __List of variables:__
 | SpawnRadius2  | ```int```   | spawn radius squared                |
 | PlayerSeed    | ```int64``` | random player seed                  |
 | Turn          | ```int```   | current turn number                 |
-| Map           | ```Map```   | [type Map] (/doc/map.md#type-map)   |
+| Map           | [```Map```] (/doc/map.md#type-map) |              |
 
 __Code:__
 ```
@@ -99,6 +99,82 @@ On ```line``` value equal ```ready```, exit
 Initialize ```words``` as a ```slice``` (see [SplitN] (http://golang.org/pkg/strings/#SplitN))
 ```
 	words := strings.SplitN(line, " ", 2)
+```
+Check that ```words``` length is greater than 2
+```
+	if len(words) != 2 { ... }
+```
+Returns an ```error```
+```
+	panic(`"` + line + `"`)
+	return errors.New("invalid command format: " + line)
+```
+Initialize ```param``` as ```words[1]``` using [string conversion] (http://golang.org/pkg/strconv/#Itoa)
+```
+	param, _ := strconv.Atoi(words[1])
+```
+Switch statement on ```words[0]```
+```
+	switch words[0] { ... }
+```
+If value is ```loadtime``` set [```State.LoadTime```] (/doc/ants.md#type-state) equal ```param```
+```
+	case "loadtime":
+		s.LoadTime = param
+```
+If value is ```turntime``` set [```State.TurnTime```] (/doc/ants.md#type-state) equal ```param```
+```
+	case "turntime":
+		s.TurnTime = param
+```
+If value is ```rows``` set [```State.Rows```] (/doc/ants.md#type-state) equal ```param```
+```
+	case "rows":
+		s.Rows = param
+```
+If value is ```cols``` set [```State.Cols```] (/doc/ants.md#type-state) equal ```param```
+```
+	case "cols":
+		s.Cols = param
+```
+If value is ```turns``` set [```State.Turns```] (/doc/ants.md#type-state) equal ```param```
+```
+	case "turns":
+		s.Turns = param
+```
+If value is ```viewradius2``` set [```State.ViewRadius2```] (/doc/ants.md#type-state) equal ```param```
+```
+	case "viewradius2":
+		s.ViewRadius2 = param
+```
+If value is ```attackradius2``` set [```State.AttackRadius2```] (/doc/ants.md#type-state) equal ```param```
+```
+	case "attackradius2":
+		s.AttackRadius2 = param
+```
+If value is ```spawnradius2``` set [```State.SpawnRadius2```] (/doc/ants.md#type-state) equal ```param```
+```
+	case "spawnradius2":
+		s.SpawnRadius2 = param
+```
+If value is ```player_seed``` set [```State.PlayerSeed```] (/doc/ants.md#type-state) equal ```param64```
+```
+	case "player_seed":
+		param64, _ := strconv.ParseInt(words[1], 10, 64)
+		s.PlayerSeed = param64
+```
+Default value
+```
+	default:
+		log.Panicf("unknown command: %s", line)
+```
+Set [```Map```] (/doc/map.md#type-map) as [```NewMap()```] (/doc/map.md#func-newmap)
+```
+	s.Map = NewMap(s.Rows, s.Cols)
+```
+Exit function
+```
+	return nil
 ```
 
 __Code:__
@@ -155,9 +231,63 @@ __Code:__
 func Loop
 ----------------
 * __Description:__ Loop handles the majority of communication between your bot and the server. b's DoWork function gets called each turn after the map has been setup BetweenTurnWork gets called after a turn but before the map is reset. It is meant to do debugging work.
-* __Receiver:__ [```State```] (/doc/ants.md#type-state)
-* __Arguments:__  [```Bot```] (/doc/ants.md#type-bot), ```BetweenTurnWork```
+* __Receiver:__ s ([```State```] (/doc/ants.md#type-state))
+* __Arguments:__  b ([```Bot```] (/doc/ants.md#type-bot)), BetweenTurnWork (```func```)
 * __Returns:__ ```error```
+
+```
+	func (s *State) Loop(b Bot, BetweenTurnWork func()) error { ... }
+```
+Write "go\n" (see [Write()] (http://golang.org/pkg/os/#File.Write)): ___indicate we're ready___
+```
+	os.Stdout.Write([]byte("go\n"))
+```
+Initialize ```line``` from [bufio.Reader.ReadString] (http://golang.org/pkg/bufio/#Reader.ReadString) and catch eventual ```error```
+```
+	line, err := stdin.ReadString('\n')
+```
+Check for ```error``` not null
+```
+	if err != nil { ... }
+```
+Check for ```error``` equals End Of File (see [EOF])
+```
+	if err == io.EOF {
+		return err
+	}
+```
+Log ```error``` (see [Panicf] (http://golang.org/pkg/log/#Panicf)) and returns it
+```
+	log.Panicf("ReadString returns an error: %s", err)
+	return err
+```
+___remove the delimiter___
+```
+	line = line[:len(line)-1]
+```
+Check ```line``` value is empty, if so continue
+```
+	if line == "" {
+		continue
+	}
+```
+Check ```line``` value equals "go"
+```
+	if line == "go" { ... }
+```
+Calls [```DoTurn()```] (/doc/MyBot.md#func-mybot)
+```
+	b.DoTurn(s)
+```
+Calls [```endTurn()```] (/doc/ants.md#func-enturn): ___end turn___
+```
+	s.endTurn()
+```
+CallBack function
+```
+	BetweenTurnWork()
+```
+
 
 __Code:__
 ```
