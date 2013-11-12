@@ -61,6 +61,19 @@ Initialize ```loc2``` as a new Location (could have been called __destination__ 
 ```
 	loc2 := s.Map.Move(loc, d)
 ```
+Check if destination is deemed safe
+```
+	if s.Map.SafeDestination(loc2) 
+```
+Do the actual ```Move``` and end the loop
+```
+	s.IssueOrderLoc(loc, d)
+	break
+```
+exit the method
+```
+	return nil
+```
 
 Complete method:
 ```
