@@ -13,7 +13,7 @@ trying to understand the code base from the go starter package
 Files:
 
 * [main.go] (/doc/main.md)
-* [MyBots.go] (/doc/MyBots.md)
+* [MyBot.go] (/doc/MyBot.md)
 * [ants.go] (/doc/ants.md)
 * [map.go] (/doc/map.md)
 * [run.sh] (/doc/run.md)
